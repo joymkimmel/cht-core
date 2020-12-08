@@ -341,7 +341,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  private watchTranslationsChanges() {
     this.changesService.subscribe({
       key: 'inbox-translations',
       filter: change => this.translationLoaderService.test(change.id),

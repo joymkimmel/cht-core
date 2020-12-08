@@ -125,6 +125,7 @@ require('../js/enketo/main');
     }
     window.startupTimes.bootstrapped = performance.now();
     if (environment.production) {
+      console.log('in prod mode???');
       enableProdMode();
     }
 
