@@ -74,6 +74,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+    this.globalActions.unsetSelected();
   }
 
   private displayFirstConversation(conversations = []) {
