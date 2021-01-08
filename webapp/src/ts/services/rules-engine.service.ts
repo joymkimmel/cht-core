@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import * as RegistrationUtils from '@medic/registration-utils';
 import * as RulesEngineCore from '@medic/rules-engine';
 import { TranslateService } from '@ngx-translate/core';
@@ -51,20 +51,21 @@ export class RulesEngineService implements OnDestroy {
   private debounceActive: DebounceActive = {};
 
   constructor(
-    private translateService: TranslateService,
-    private authService: AuthService,
-    private sessionService: SessionService,
-    private settingsService: SettingsService,
-    private telemetryService: TelemetryService,
-    private uhcSettingsService: UHCSettingsService,
-    private userContactService: UserContactService,
-    private userSettingsService: UserSettingsService,
-    private parseProvider: ParseProvider,
-    private changesService: ChangesService,
-    private contactTypesService: ContactTypesService,
-    private translateFromService: TranslateFromService,
-    private rulesEngineCoreFactoryService: RulesEngineCoreFactoryService,
-    private calendarIntervalService: CalendarIntervalService
+    private translateService:TranslateService,
+    private authService:AuthService,
+    private sessionService:SessionService,
+    private settingsService:SettingsService,
+    private telemetryService:TelemetryService,
+    private uhcSettingsService:UHCSettingsService,
+    private userContactService:UserContactService,
+    private userSettingsService:UserSettingsService,
+    private parseProvider:ParseProvider,
+    private changesService:ChangesService,
+    private contactTypesService:ContactTypesService,
+    private translateFromService:TranslateFromService,
+    private rulesEngineCoreFactoryService:RulesEngineCoreFactoryService,
+    private calendarIntervalService:CalendarIntervalService,
+    private ngZone:NgZone,
   ) {
     this.initialized = this.initialize();
     this.rulesEngineCore = this.rulesEngineCoreFactoryService.get();
@@ -75,6 +76,10 @@ export class RulesEngineService implements OnDestroy {
   }
 
   private initialize() {
+    return this.ngZone.runOutsideAngular(() => this._initialize());
+  }
+
+  private _initialize() {
     return Promise
       .all([
         this.authService.has('can_view_tasks'),
@@ -308,6 +313,10 @@ export class RulesEngineService implements OnDestroy {
   }
 
   fetchTaskDocsForAllContacts() {
+    return this.ngZone.runOutsideAngular(() => this._fetchTaskDocsForAllContacts());
+  }
+
+  private _fetchTaskDocsForAllContacts() {
     const telemetryData = this.telemetryEntry('rules-engine:tasks:all-contacts');
 
     return this.initialized
@@ -327,6 +336,10 @@ export class RulesEngineService implements OnDestroy {
   }
 
   fetchTaskDocsFor(contactIds) {
+    return this.ngZone.runOutsideAngular(() => this._fetchTaskDocsFor(contactIds));
+  }
+
+  private _fetchTaskDocsFor(contactIds) {
     const telemetryData = this.telemetryEntry('rules-engine:tasks:some-contacts');
 
     return this.initialized
@@ -346,6 +359,10 @@ export class RulesEngineService implements OnDestroy {
   }
 
   fetchTargets() {
+    return this.ngZone.runOutsideAngular(() => this._fetchTargets());
+  }
+
+  private _fetchTargets() {
     const telemetryData = this.telemetryEntry('rules-engine:targets');
 
     return this.initialized
